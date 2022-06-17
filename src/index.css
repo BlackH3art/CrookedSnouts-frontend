@@ -1,0 +1,120 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+.navigation {
+  background-image: url("./images/navigation-big.svg");
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+.title, div.stats-container, .no-item {
+  font-family: 'Josefin Sans', sans-serif;
+}
+
+.white-glassmorphism {
+  background: rgba(255, 255, 255, 0.486);
+  border-radius: 16px;
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  border: 1px solid rgba(255, 255, 255, 0.699);
+  overflow: hidden;
+}
+
+section.mint-segment {
+  background-image: url("./images/mint-section-big.svg");
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.blackh3art {
+  background-image: url('./images/4451.jpg');
+  background-position: center;
+}
+
+.footer {
+  background-image: url("./images/footer-big.svg");
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.polygon-first {
+  clip-path: polygon(9% 10%, 95% 3%, 98% 98%, 3% 87%);
+}
+
+.polygon-first-inner {
+  clip-path: polygon(10% 13%, 97% 6%, 96% 100%, 4% 94%);
+  background-image: linear-gradient(90deg, rgb(253, 70, 125) 0%, rgb(167, 100, 244) 100%);
+}
+
+.polygon-second {
+  clip-path: polygon(1% 2%, 98% 13%, 94% 85%, 5% 100%);
+}
+
+.polygon-second-inner {
+  clip-path: polygon(5% 0, 95% 10%, 92% 90%, 4% 96%);
+  background-image: linear-gradient(90deg, rgb(167, 100, 244) 0%, rgb(70, 210, 253) 100%);
+}
+
+.polygon-third {
+  clip-path: polygon(1% 16%, 100% 3%, 97% 96%, 2% 85%);
+}
+
+.polygon-third-inner {
+  clip-path: polygon(3% 14%, 97% 8%, 95% 91%, 3% 88%);
+  background-image: linear-gradient(90deg, rgb(253, 70, 213) 0%, rgb(167, 100, 244) 100%);
+}
+
+.polygon-fourth {
+  clip-path: polygon(4% 1%, 95% 14%, 90% 88%, 5% 100%);
+}
+
+.polygon-fourth-inner {
+  clip-path: polygon(6% 0, 92% 10%, 93% 90%, 4% 91%);
+  background-image: linear-gradient(90deg, rgb(167, 100, 244) 0%, rgb(70, 253, 222) 100%);
+}
+
+.time-span {
+  width: 2ch;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+@media (max-width: 1025px) {
+  .navigation {
+    background-image: url("./images/navigation-tablet.svg");
+  }
+}
+
+@media (max-width: 600px) {
+  .navigation {
+    background-image: url("./images/navigation-mobile.svg");
+  }
+}
+
