@@ -26,7 +26,7 @@ const Footer: FC = () => {
           <div className="flex flex-col justify-end pb-6">
 
             <div className="flex pt-4 justify-end">
-              <SocialLink link="">
+              <SocialLink link="https://github.com/BlackH3art/CrookedSnouts-frontend">
                 <FaGithub size="1.8em" className="mx-2" />
               </SocialLink>
 

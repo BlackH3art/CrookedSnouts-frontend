@@ -42,7 +42,7 @@ const Table: FC = () => {
         <tr className="flex flex-col md:flex-row w-full">
           <TableHead>contract address:</TableHead>
           <TableCell>
-            <a className="link" href="https://polygonscan.com/address/0xE2047175C0F685f813938Cc8Fdc027259F0C87de">Polygon scan</a>
+            <a className="link" rel="noopener noreferrer" target="_blank" href="https://polygonscan.com/address/0xE2047175C0F685f813938Cc8Fdc027259F0C87de">Polygon scan</a>
           </TableCell>
         </tr>
         <tr className="flex flex-col md:flex-row w-full">
