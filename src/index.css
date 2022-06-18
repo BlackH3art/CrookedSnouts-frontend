@@ -43,6 +43,29 @@ section.mint-segment {
   background-size: cover;
 }
 
+section.error-page {
+  background: rgb(250, 250, 250);
+  background: linear-gradient(180deg, rgb(255, 255, 255) 0%, rgba(243,244,246,1) 100%);
+}
+
+.link {
+  text-decoration: underline;
+  color: rgb(120, 22, 165);
+  transition: .2s;
+}
+
+.link:hover {
+  color: blueviolet;
+}
+
+td, th {
+  font-family: 'Josefin Sans', sans-serif;
+}
+
+thead {
+  padding-top: 20px;
+}
+
 .blackh3art {
   background-image: url('./images/4451.jpg');
   background-position: center;

@@ -9,7 +9,7 @@ const Roadmap: FC = () => {
 
         <div className="w-full flex flex-col md:w-4/5 lg:w-3/5">
 
-          <h2 className="title w-full text-left font-bold text-3xl md:text-4xl lg:text-5xl pb-5 pt-20 px-5">
+          <h2 className="title w-full text-right font-bold text-3xl md:text-4xl lg:text-5xl pb-5 pt-20 px-5">
             Roadmap
           </h2>
 

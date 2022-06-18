@@ -67,6 +67,8 @@ const Whitelist: FC = () => {
 
       if(error.data.message === "execution reverted: Sender is already whitelisted") {
         toast.error("Address already whitelisted", { theme: "colored" }); 
+      } else if (error.data.message === "execution reverted: whitelist not started yet") {
+        toast.error("Whitelist not started yet", { theme: "colored" }); 
       } else {
         toast.error("Something went wrong", { theme: "colored" }); 
       }
@@ -79,7 +81,7 @@ const Whitelist: FC = () => {
         <div className="mt-10 flex flex-col items-center">
           <h2 className="title font-bold text-3xl md:text-4xl lg:text-5xl pt-5">
             {now.isAfter(whitelistClose * 1000) ? 'Whitelist is closed' : (
-              isWhitelistClosed ? "Whitelist will be open in" : "Whitelist is open for:"
+              isWhitelistOpenedYet ? "Whitelist will be open in" : "Whitelist is open for:"
             )}
           </h2>
 

@@ -1,14 +1,12 @@
-import Main from "./components/Main/Main";
-import MintSegment from "./components/ActionSegment/ActionSegment";
 import Navigation from "./components/Navigation/Navigation";
-import YourCollection from "./components/YourCollection/YourCollection";
+import Footer from "./components/Footer/Footer";
+import DappBody from "./components/DappBody/DappBody";
+
+import { Routes, Route, Navigate } from "react-router-dom";
 
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import Creator from "./components/Creator/Creator";
-import Footer from "./components/Footer/Footer";
-import Roadmap from "./components/Roadmap/Roadmap";
-import About from "./components/About/About";
+import ErrorPage from "./components/ErrorPage/ErrorPage";
 
 function App() {
 
@@ -19,12 +17,12 @@ function App() {
 
       <ToastContainer />
 
-      <Main />
-      <MintSegment />
-      <YourCollection />
-      <About />
-      <Roadmap />
-      <Creator />
+      <Routes>
+        <Route path="/" element={<DappBody />} />
+        <Route path="/404" element={<ErrorPage />} />
+        <Route path="*" element={ <Navigate to="/404" /> } />
+      </Routes>
+
 
       <Footer />
       

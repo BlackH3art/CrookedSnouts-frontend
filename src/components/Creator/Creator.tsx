@@ -27,10 +27,16 @@ const Creator: FC = () => {
 
               <div className="blackh3art rounded-full w-[250px] h-[250px] bg-gray-400 shrink-0 lg:hidden my-5"/>
 
-              <p className="text-lg md:text-xl text-center pb-10 px-5 lg:pl-20">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequuntur repellat amet ipsa quas voluptatum dignissimos laboriosam ab expedita saepe, deserunt quae ad quasi quo temporibus pariatur ex qui optio cupiditate.
-                Corrupti possimus molestiae eum laudantium repellat ipsum impedit recusandae, voluptas incidunt sint officiis nesciunt dolores maiores quibusdam reiciendis atque, voluptatum architecto sapiente dolore non vitae nisi? Quas blanditiis sit suscipit.
-              </p>
+              <div className="flex flex-col">
+                <p className="text-lg md:text-xl text-center px-5 lg:pl-20">
+                  I'm creating this NFT project just to showcase my blockchain, web3 development skills and bring some fun and laugh during this hard times in crypto and market overall. 
+                  Bear markets are the best to learn this industry and keep believing in freedom that web3 will bring to us one day.
+                </p>
+                <br />
+                <p className="text-lg md:text-xl text-center pb-10 px-5 lg:pl-20">
+                  Stay strong fam! And in the meantime.. get yourself a CrookedSnout! Join the gang, it's cheap af, especially #ForTheRekt ones, just like we all are now.
+                </p>
+              </div>
 
               <div className="w-full flex justify-center">
                 <SocialLink link="https://blackh3art.dev/">
