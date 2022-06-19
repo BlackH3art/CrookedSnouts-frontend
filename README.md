@@ -1,9 +1,20 @@
 # Crooked Snouts NFT
 
+Dapp is deployed on:\
+https://crookedsnouts.com/
+
 ![](src/images/bg-thumbnail.png "thumbnail")
 
-Whitelist contract is deployed on address:
+Application is deployed on Polygon mainnet.
+
+Whitelist contract address:\
 https://polygonscan.com/address/0xE2047175C0F685f813938Cc8Fdc027259F0C87de
+
+Smart contract repo:\
+https://github.com/BlackH3art/CrookedSnouts-smart-contract
+
+Backend API repo:\
+https://github.com/BlackH3art/CrookedSnouts-backend-api
 
 -----
 
