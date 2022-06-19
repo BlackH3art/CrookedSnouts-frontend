@@ -26,6 +26,12 @@ export const AppContext = createContext<AppContextInterface>({
 });
 
 const getSigner = () => {
+
+  if(!ethereum) {
+    console.warn('No Metamask detected');
+    return null;
+  }
+
   const provider = new ethers.providers.Web3Provider(ethereum);
   const signer = provider.getSigner();
 
@@ -34,6 +40,11 @@ const getSigner = () => {
 
 const getContractSigner = () => {
   const signer = getSigner();
+
+  if(!signer) {
+    console.warn('There\'s no signer');
+    return null;
+  }
   const whitelistContract = new ethers.Contract(whitelistContractAddress, whitelistContractABI, signer);
 
   return whitelistContract;
@@ -113,8 +124,12 @@ const AppContextProvider: FC<Props> = ({ children }) => {
   
   
   const requestAndSetConnectedAccount = async () => {
-    const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
-    setConnectedAcount(accounts[0]);
+    try {
+      const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+      setConnectedAcount(accounts[0]);
+    } catch (error) {
+      console.warn('Not connected');   
+    }
   }
   
   const connectWallet = async () => {
@@ -138,6 +153,8 @@ const AppContextProvider: FC<Props> = ({ children }) => {
         
       }
     } catch (error) {
+      console.log('here?');
+      
       console.error(error);
     }
   }
@@ -148,9 +165,9 @@ const AppContextProvider: FC<Props> = ({ children }) => {
       console.warn('MetaMask is not installed on this browser.')
     } else {
       
-      // if(ethereum.isConnected()) {
-      //   requestAndSetConnectedAccount();
-      // } 
+      if(ethereum.isConnected()) {
+        requestAndSetConnectedAccount();
+      } 
     }
 
   }, []);
