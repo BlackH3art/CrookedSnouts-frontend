@@ -1,5 +1,6 @@
 import { BigNumber, ethers } from "ethers";
 import { FC, useContext, useEffect, useState } from "react";
+import { toast } from "react-toastify";
 import { AppContext } from "../../context/AppContext";
 
 
@@ -12,8 +13,22 @@ const Navigation: FC = () => {
   useEffect(() => {
 
     async function getBalance() {
-      let signerBalance = await signer?.getBalance();
-      setBalance(Number(ethers.utils.formatEther(BigNumber.from(signerBalance))))
+      try {
+
+        if(!signer) {
+          return;
+        } else {
+
+          if(!connectedAccount) {
+            return; 
+          } else {
+            let signerBalance = await signer.getBalance();
+            setBalance(Number(ethers.utils.formatEther(BigNumber.from(signerBalance))))
+          }
+        }
+      } catch (error) {
+        toast.error("Problem getting a signer. Try refresh.", { theme: "colored" }); 
+      }
     }
 
     getBalance();

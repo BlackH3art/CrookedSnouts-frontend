@@ -80,31 +80,45 @@ const AppContextProvider: FC<Props> = ({ children }) => {
 
     async function fetchWhitelistData() {
 
-      const results = await Promise.all([
-        getMaxWhitelistSpots(),
-        getMaxPublicWhitelistSpots(),
-        getMaxOwnerWhitelistSpots(),
-        getPublicSpotsTaken(),
-        getOwnerSpotsTaken(),
-        getWhitelistOpen(),
-        getWhitelistClose()
-      ]);
+      // const results = await Promise.all([
+      //   getMaxWhitelistSpots(),
+      //   getMaxPublicWhitelistSpots(),
+      //   getMaxOwnerWhitelistSpots(),
+      //   getPublicSpotsTaken(),
+      //   getOwnerSpotsTaken(),
+      //   getWhitelistOpen(),
+      //   getWhitelistClose()
+      // ]);
 
-      let maxSpots = results[0].data;
-      let publicSpots = results[1].data;
-      let ownerSpots = results[2].data;
-      let publicTakenSpots = results[3].data;
-      let ownerTakenSpots = results[4].data;
-      let startTimestamp = results[5].data.hex;
-      let endTimestamp = results[6].data.hex;
-      
-      setMaxWhitelistSpots(maxSpots);
-      setMaxPublicSpots(publicSpots);
-      setMaxOwnerSpots(ownerSpots);
-      setTakenPublicSpots(publicTakenSpots);
-      setTakenOwnerSpots(ownerTakenSpots);
-      setWhitelistOpen(parseInt(startTimestamp));
-      setWhitelistClose(parseInt(endTimestamp));
+      // let maxSpots = results[0].data;
+      // let publicSpots = results[1].data;
+      // let ownerSpots = results[2].data;
+      // let publicTakenSpots = results[3].data;
+      // let ownerTakenSpots = results[4].data;
+      // let startTimestamp = results[5].data.hex;
+      // let endTimestamp = results[6].data.hex;
+
+      try {
+        
+        let maxSpots = await getMaxWhitelistSpots();
+        let publicSpots = await getMaxPublicWhitelistSpots();
+        let ownerSpots = await getMaxOwnerWhitelistSpots();
+        let publicTakenSpots = await getPublicSpotsTaken();
+        let ownerTakenSpots = await getOwnerSpotsTaken();
+        let startTimestamp = await getWhitelistOpen();
+        let endTimestamp = await getWhitelistClose();
+        
+        setMaxWhitelistSpots(maxSpots.data);
+        setMaxPublicSpots(publicSpots.data);
+        setMaxOwnerSpots(ownerSpots.data);
+        setTakenPublicSpots(publicTakenSpots.data);
+        setTakenOwnerSpots(ownerTakenSpots.data);
+        setWhitelistOpen(parseInt(startTimestamp.data.hex));
+        setWhitelistClose(parseInt(endTimestamp.data.hex));
+        
+      } catch (error) {
+        toast.error("Some error while fetching data. Try refresh.", { theme: "colored" }); 
+      }
     }
 
     fetchWhitelistData();

@@ -1,8 +1,7 @@
 import axios, { AxiosResponse } from 'axios';
 
 const API = axios.create({ 
-  // baseURL: 'https://crookedsnouts-backend.herokuapp.com/'
-  baseURL: 'http://localhost:3500'
+  baseURL: 'https://crookedsnouts-backend.herokuapp.com/'
 });
 
 export const generateSVG = () => API.get('/generate-svg');
