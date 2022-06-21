@@ -8,6 +8,7 @@ import { whitelistContractABI, whitelistContractAddress } from "../utils/constan
 const { ethereum } = window;
 
 export const AppContext = createContext<AppContextInterface>({
+  setAddedToWhitelist: () => {},
   connectWallet: () => {},
   connectedAccount: '',
 
@@ -60,6 +61,7 @@ const AppContextProvider: FC<Props> = ({ children }) => {
   const signer = getSigner();
 
   const [connectedAccount, setConnectedAcount] = useState<string>('');
+  const [addedToWhitelist, setAddedToWhitelist] = useState<boolean>(false);
 
   // get max whitelist spots
   const [maxWhitelistSpots, setMaxWhitelistSpots] = useState<number>(0);
@@ -123,7 +125,7 @@ const AppContextProvider: FC<Props> = ({ children }) => {
 
     fetchWhitelistData();
 
-  }, []);
+  }, [addedToWhitelist]);
 
   
   ethereum?.on('accountsChanged', (accounts: string[]) => {
@@ -162,14 +164,16 @@ const AppContextProvider: FC<Props> = ({ children }) => {
         
         // everything is good - connect wallet
       } else {
-        const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
-        setConnectedAcount(accounts[0]);
+        try {
+          const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+          setConnectedAcount(accounts[0]);
+        } catch (error) {
+          toast.error("Requesting your account failed", { theme: "colored" }); 
+        }
         
       }
     } catch (error) {
-      console.log('here?');
-      
-      console.error(error);
+      toast.error("Unexpected error while connecting wallet", { theme: "colored" }); 
     }
   }
   
@@ -189,6 +193,7 @@ const AppContextProvider: FC<Props> = ({ children }) => {
 
   return (
     <AppContext.Provider value={{
+      setAddedToWhitelist,
       connectWallet,
       connectedAccount,
       maxWhitelistSpots,

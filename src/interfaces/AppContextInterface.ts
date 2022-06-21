@@ -1,6 +1,8 @@
 import { ethers } from "ethers";
+import { Dispatch, SetStateAction } from "react";
 
 export interface AppContextInterface {
+  setAddedToWhitelist: Dispatch<SetStateAction<boolean>>
   connectWallet: () => void;
   connectedAccount: string;
   // max spots

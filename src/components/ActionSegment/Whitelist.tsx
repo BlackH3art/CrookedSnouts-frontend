@@ -13,7 +13,7 @@ import dayjs from "dayjs";
 
 const Whitelist: FC = () => {
 
-  const { connectWallet, connectedAccount, whitelistContractSigner, whitelistClose, whitelistOpen } = useContext(AppContext);
+  const { setAddedToWhitelist, connectWallet, connectedAccount, whitelistContractSigner, whitelistClose, whitelistOpen } = useContext(AppContext);
   const [loading, setLoading] = useState<boolean>(false);
   const [isOnWhitelist, setIsOnWhitelist] = useState<boolean>(false);
 
@@ -55,10 +55,11 @@ const Whitelist: FC = () => {
       setLoading(true);
       const transactionHash = await whitelistContractSigner?.addAddressToWhitelist();
 
-      await transactionHash.wait();
+      const receipt = await transactionHash.wait();
 
       setLoading(false);
       setIsOnWhitelist(true);
+      setAddedToWhitelist(true);
       toast.success("Successfully added to whitelist!", { theme: "colored" }); 
 
     } catch (error: any) {
@@ -69,6 +70,10 @@ const Whitelist: FC = () => {
         toast.error("Address already whitelisted", { theme: "colored" }); 
       } else if (error.data.message === "execution reverted: whitelist not started yet") {
         toast.error("Whitelist not started yet", { theme: "colored" }); 
+      } else if(error.data.message === "execution reverted: Whitelist closed") {
+        toast.error("Whitelist is closed", { theme: "colored" }); 
+      } else if(error.data.message === "execution reverted: Public whitelist spots limit reached") {
+        toast.error("Public spots limit reached", { theme: "colored" }); 
       } else {
         toast.error("Something went wrong", { theme: "colored" }); 
       }
@@ -93,7 +98,7 @@ const Whitelist: FC = () => {
               <MainButton callback={addToWhitelist} disabled={loading || isOnWhitelist || isWhitelistClosed}>
                 {isWhitelistClosed ? 'Wait for public mint!' : (
                   loading ? <PulseLoader color="#ffffff" size={10} /> : (isOnWhitelist ? "You're whitelisted!" : (
-                    isWhitelistOpenedYet ? "Add me to whitelist!" : "Wait for open!"
+                    isWhitelistOpenedYet ?  "Wait for open!" : "Add me to whitelist!"
                   ))
                 )}
               </MainButton>
@@ -107,7 +112,7 @@ const Whitelist: FC = () => {
               <MainButtonMobile callback={addToWhitelist} disabled={loading || isOnWhitelist || isWhitelistClosed}>
                 {isWhitelistClosed ? 'Wait for public mint!' : (
                   loading ? <PulseLoader color="#ffffff" size={10} /> : (isOnWhitelist ? "You're whitelisted!" : (
-                    isWhitelistOpenedYet ? "Add me to whitelist!" : "Wait for open!"
+                    isWhitelistOpenedYet ?  "Wait for open!" : "Add me to whitelist!"
                   ))
                 )}
               </MainButtonMobile>
