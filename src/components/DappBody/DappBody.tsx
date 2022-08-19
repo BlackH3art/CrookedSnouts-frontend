@@ -15,7 +15,7 @@ const DappBody: FC = () => {
       <Main />
       <ActionSegment />
       <Collection />
-      {/* <YourCollection /> */}
+      <YourCollection />
       <About />
       <Roadmap />
       <Creator />

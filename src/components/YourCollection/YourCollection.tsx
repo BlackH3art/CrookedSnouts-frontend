@@ -1,8 +1,25 @@
-import { FC } from "react";
+import { FC, useContext, useEffect, useState } from "react";
+import { getNfts } from "../../api";
+import { MintContext } from "../../context/MintContext";
+import NFTsCard from "./NFTsCard";
+
 import NoItemThere from "./NoItemThere";
 
 
 const YourCollection: FC = () => {
+
+  const { connectedAccount, setAccountNFTs, accountNFTs } = useContext(MintContext);
+
+  
+  useEffect(() => {
+
+    const getNftsData = async () => {
+      const { data } = await getNfts(connectedAccount);
+      setAccountNFTs(data);
+    }
+
+    getNftsData();
+  }, [connectedAccount]);
 
   return (
     <>
@@ -13,11 +30,17 @@ const YourCollection: FC = () => {
             Your collection
           </h2>
 
-          <div className="w-full flex flex-col md:flex-row items-center">
+          <div className="w-full flex flex-wrap items-center">
 
-            <NoItemThere />
-            <NoItemThere />
-            <NoItemThere />
+            {accountNFTs.length === 0 ? (
+              <>
+                <NoItemThere />
+                <NoItemThere />
+                <NoItemThere />
+              </>
+            ) : accountNFTs.sort((a, b) => Number(b.tokenId) - Number(a.tokenId)).map(item => (
+              <NFTsCard key={item.tokenId} tokenId={item.tokenId} image={item.image} />
+            ))}
 
           </div>
 

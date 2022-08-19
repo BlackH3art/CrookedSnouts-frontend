@@ -1,10 +1,14 @@
 import axios, { AxiosResponse } from 'axios';
+import { ethers } from 'ethers';
+import { FulfilledResponseInterface } from '../interfaces/FulfilledResponseInterface';
+import { NFTsResponseInterface } from '../interfaces/NFTsResponseInterface';
+import { ParsedNumbersInterface } from '../interfaces/ParsedNumbersInterface';
 
 const API = axios.create({ 
-  baseURL: 'https://crookedsnouts-backend.herokuapp.com/'
+  // baseURL: 'https://crookedsnouts-backend.herokuapp.com/'
+  baseURL: 'http://localhost:3500/'
 });
 
-export const generateSVG = () => API.get('/generate-svg');
 
   // get max whitelist spots
 export const getMaxWhitelistSpots = () => API.get<never, AxiosResponse>('blockchain-provider/whitelist/spots/max');
@@ -20,3 +24,7 @@ export const getWhitelistOpen = () => API.get<never, AxiosResponse>('blockchain-
 export const getWhitelistClose = () => API.get<never, AxiosResponse>('blockchain-provider/whitelist/close');
 
 export const getIsWhitelisted = (address: string) => API.get<never, AxiosResponse>(`blockchain-provider/whitelist/isWhitelisted/${address}`);
+
+
+// collection contract
+export const getNfts = (address: string) => API.get<NFTsResponseInterface[]>(`nft-data/${address}`);

@@ -14,10 +14,10 @@ const Collection: FC = () => {
 
           <div className="w-full flex flex-col items-center">
 
-            <p className="text-lg md:text-xl text-center">
-              We are 10.000 decentralized, broke and ugly af Crooked Snouts living on Polygon chain!
+            <p className="text-lg md:text-xl text-center px-2">
+              We are 10.000 decentralized, completely randomized, unique, on-chain generated SVG NFTs collection of broke and ugly af Crooked Snouts living on Polygon chain!
             </p>
-            <p className="text-lg md:text-xl text-center pb-10">
+            <p className="text-lg md:text-xl text-center pb-10 px-2">
               Join the useless gang and mint yourself a cheap and ugly Crooked Snout!
             </p>
 

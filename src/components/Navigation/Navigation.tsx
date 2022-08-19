@@ -1,13 +1,13 @@
 import { BigNumber, ethers } from "ethers";
 import { FC, useContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import { AppContext } from "../../context/AppContext";
+import { MintContext } from "../../context/MintContext";
 
 
 
 const Navigation: FC = () => {
 
-  const { connectWallet, connectedAccount, signer } = useContext(AppContext);
+  const { connectWallet, connectedAccount, signer } = useContext(MintContext);
   const [balance, setBalance] = useState<number>(0);
 
   useEffect(() => {
@@ -18,7 +18,6 @@ const Navigation: FC = () => {
         if(!signer) {
           return;
         } else {
-
           if(!connectedAccount) {
             return; 
           } else {

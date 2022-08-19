@@ -6,7 +6,7 @@ interface StatProps {
   value: number | string;
 }
 
-const StatRow: FC<StatProps> = ({ title, value }) => (
+export const StatRow: FC<StatProps> = ({ title, value }) => (
   <div className="flex w-full text-xl">
     <h2 className="w-1/2 text-right font-semibold">{title}:</h2>
     <p className="w-1/3 pl-5 text-2xl text-center">{value ? value : <ClipLoader color="#c481f0" size={"1.3rem"} />}</p>

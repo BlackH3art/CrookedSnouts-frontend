@@ -10,8 +10,8 @@ const ActionSegment: FC = () => {
     <>
       <section className="mint-segment w-full min-h-[80vh] flex justify-center items-center">
 
-        {/* <Mint /> */}
-        <Whitelist />
+        <Mint />
+        {/* <Whitelist /> */}
         
       </section>
     </>

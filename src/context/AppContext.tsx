@@ -177,18 +177,18 @@ const AppContextProvider: FC<Props> = ({ children }) => {
     }
   }
   
-  useEffect(() => {
+  // useEffect(() => {
 
-    if(!ethereum) {
-      console.warn('MetaMask is not installed on this browser.')
-    } else {
+  //   if(!ethereum) {
+  //     console.warn('MetaMask is not installed on this browser.')
+  //   } else {
       
-      if(ethereum.isConnected()) {
-        requestAndSetConnectedAccount();
-      } 
-    }
+  //     if(ethereum.isConnected()) {
+  //       requestAndSetConnectedAccount();
+  //     } 
+  //   }
 
-  }, []);
+  // }, []);
 
 
   return (

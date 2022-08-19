@@ -26,7 +26,7 @@ const Table: FC = () => {
         </tr>
         <tr className="flex flex-col md:flex-row w-full">
           <TableHead>mint price:</TableHead>
-          <TableCell>5 MATIC</TableCell>
+          <TableCell>3 MATIC</TableCell>
         </tr>
         <tr className="flex flex-col md:flex-row w-full">
           <TableHead>max mints:</TableHead>
@@ -51,7 +51,7 @@ const Table: FC = () => {
         </tr>
         <tr className="flex flex-col md:flex-row w-full">
           <TableHead>max mints:</TableHead>
-          <TableCell>5 mints</TableCell>
+          <TableCell>no limits</TableCell>
         </tr>
       </tbody>
     </table>
