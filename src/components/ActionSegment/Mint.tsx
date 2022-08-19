@@ -1,7 +1,7 @@
 import { FC, useContext, useEffect, useState } from "react";
 import { MintContext } from "../../context/MintContext";
 
-import { getNfts } from "../../api";
+import { getIsWhitelisted, getNfts } from "../../api";
 import { toast } from "react-toastify";
 import { ethers } from 'ethers';
 
@@ -31,6 +31,7 @@ const Mint: FC<Props> = () => {
   const { connectWallet, connectedAccount, collectionContractSigner, setAccountNFTs } = useContext(MintContext);
   const [minted, setMinted] = useState<boolean>(false);
   const [generatedNFT, setGeneratedNFT] = useState<string>('');
+  const [isUserWhitelisted, setIsUserWhitelisted] = useState<boolean>(false);
 
   const [requestedNumbers, setRequestedNumbers] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
@@ -40,10 +41,30 @@ const Mint: FC<Props> = () => {
 
 
   useEffect(() => {
-
     setCollectionContract(collectionContractProvider());
-
   }, []);
+
+  useEffect(() => {
+    async function isWhitelisted() {
+      try {
+
+        if(connectedAccount) {
+          const { data } = await getIsWhitelisted(connectedAccount);
+  
+          if(data) {
+            setIsUserWhitelisted(true);
+          } else {
+            setIsUserWhitelisted(false);
+          }
+        }
+      } catch (error) {
+        toast.error("Incorrect address", { theme: "colored" });
+      }
+    }
+
+    isWhitelisted();
+  }, [connectedAccount]);
+
 
 
   const requestNumbers = async () => {
@@ -53,7 +74,7 @@ const Mint: FC<Props> = () => {
     try {
       
       const transactionHash = await collectionContractSigner?.requestNumbers({
-        value: ethers.utils.parseEther("3")
+        value: ethers.utils.parseEther(isUserWhitelisted ? "1" : "3")
       });
       await transactionHash.wait();
       
@@ -69,7 +90,6 @@ const Mint: FC<Props> = () => {
   }
 
   collectionContract?.on("RequestFulfilled", async (num) => {
-      
     try {
       const requestId = await collectionContract.addressToRequestId(connectedAccount);
 

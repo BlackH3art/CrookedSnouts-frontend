@@ -1,7 +1,6 @@
 import { ethers } from "ethers";
 import { useState, useEffect, createContext, FC, ReactNode } from "react";
 import { toast } from "react-toastify";
-import { AppContextInterface } from "../interfaces/AppContextInterface";
 import { MintContextInterface } from "../interfaces/MintContextInterface";
 import { NFTsResponseInterface } from "../interfaces/NFTsResponseInterface";
 import { collectionContractABI, collectionContractAddress } from "../utils/constants";
@@ -61,10 +60,6 @@ const MintContextProvider: FC<Props> = ({ children }) => {
 
 
   
-
-
-
-  
   ethereum?.on('accountsChanged', (accounts: string[]) => {
     if(ethereum.isConnected()) {
       requestAndSetConnectedAccount();
@@ -81,56 +76,50 @@ const MintContextProvider: FC<Props> = ({ children }) => {
       const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
       setConnectedAcount(accounts[0]);
     } catch (error) {
+      toast.error("You are not connected", { theme: "colored" });
       console.warn('Not connected');   
     }
   }
   
   const connectWallet = async () => {
     
-    // try {
-      
-    //   // if no metamask then prompt an error toast
-    //   if(!ethereum) {
-    //     toast.error("You need MetaMask. Please visit: https://metamask.io/", { theme: "colored" }); 
-        
-        
-    //     // if network different than mumbai, then prompt an error toast
-    //   } else if(parseInt(await ethereum.request({ method: 'eth_chainId' }), 16) !== 80001) {
-    //     toast.error("Change network to: Polygon mainnet", { theme: "colored" }); 
-        
-        
-    //     // everything is good - connect wallet
-    //   } else {
-    //     try {
-    //       const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
-    //       setConnectedAcount(accounts[0]);
-    //     } catch (error) {
-    //       toast.error("Requesting your account failed", { theme: "colored" }); 
-    //     }
-        
-    //   }
-    // } catch (error) {
-    //   toast.error("Unexpected error while connecting wallet", { theme: "colored" }); 
-    // }
-
-
-
     try {
-      const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
-      setConnectedAcount(accounts[0]);
+      
+      // if no metamask then prompt an error toast
+      if(!ethereum) {
+        toast.error("You need MetaMask. Please visit: https://metamask.io/", { theme: "colored" }); 
+        
+        
+        // if network different than mumbai, then prompt an error toast
+      } else if(parseInt(await ethereum.request({ method: 'eth_chainId' }), 16) !== 80001) {
+        toast.error("Change network to: Polygon mainnet", { theme: "colored" }); 
+        
+        
+        // everything is good - connect wallet
+      } else {
+        try {
+          const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+          setConnectedAcount(accounts[0]);
+        } catch (error) {
+          toast.error("Requesting your account failed", { theme: "colored" }); 
+        }
+        
+      }
     } catch (error) {
-      toast.error("Requesting your account failed", { theme: "colored" }); 
+      toast.error("Unexpected error while connecting wallet", { theme: "colored" }); 
     }
+
   }
   
   useEffect(() => {
 
     if(!ethereum) {
-      console.warn('MetaMask is not installed on this browser.')
+      toast.error("You will need MetaMask to mint Crooked Snouts");
+      console.warn('MetaMask is not installed on this browser.');
     } else {
       
       if(ethereum.isConnected()) {
-        // requestAndSetConnectedAccount();
+        requestAndSetConnectedAccount();
       } 
     }
 

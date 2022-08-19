@@ -23,7 +23,7 @@ export const getOwnerSpotsTaken = () => API.get<never, AxiosResponse>('blockchai
 export const getWhitelistOpen = () => API.get<never, AxiosResponse>('blockchain-provider/whitelist/open');
 export const getWhitelistClose = () => API.get<never, AxiosResponse>('blockchain-provider/whitelist/close');
 
-export const getIsWhitelisted = (address: string) => API.get<never, AxiosResponse>(`blockchain-provider/whitelist/isWhitelisted/${address}`);
+export const getIsWhitelisted = (address: string) => API.get<boolean>(`blockchain-provider/whitelist/isWhitelisted/${address}`);
 
 
 // collection contract
