@@ -10,6 +10,7 @@ import PreMint from '../../images/pre-mint.svg';
 import MainButton from "../_Reusable/MainButton";
 import MainButtonMobile from "../_Reusable/MainButtonMobile";
 import ClipLoader from 'react-spinners/ClipLoader';
+import BarLoader from 'react-spinners/BarLoader';
 
 import { collectionContractABI, collectionContractAddress } from "../../utils/constants";
 
@@ -74,7 +75,7 @@ const Mint: FC<Props> = () => {
     try {
       
       const transactionHash = await collectionContractSigner?.requestNumbers({
-        value: ethers.utils.parseEther(isUserWhitelisted ? "1" : "3")
+        value: ethers.utils.parseEther(!isUserWhitelisted ? "1" : "3")
       });
       await transactionHash.wait();
       
@@ -138,11 +139,16 @@ const Mint: FC<Props> = () => {
         {connectedAccount ? (
           requestedNumbers ? (
             <MainButtonMobile callback={mint} disabled={loading || pendingRequest}>
-              Finish mint!
+              {pendingRequest ? (
+                  <div className="flex flex-col pb-4 items-center">
+                    <p className="text-md pb-2">Generating layers</p>
+                    <BarLoader color="white" />
+                  </div>
+                ) : loading ? <ClipLoader color="white" size={"1.3rem"}/> : "Finish mint!"}
             </MainButtonMobile>
           ) : (
             <MainButtonMobile callback={requestNumbers} disabled={loading || pendingRequest}>
-              Mint!
+              {loading ? <ClipLoader color="white" size={"1.3rem"}/> : "Mint!"}
             </MainButtonMobile>
           )
         ) : (
@@ -167,7 +173,12 @@ const Mint: FC<Props> = () => {
           {connectedAccount ? ( 
             requestedNumbers ? (
               <MainButton callback={mint} disabled={loading || pendingRequest}>
-                {pendingRequest ? <div>Generating layers<ClipLoader color="white" size={"1.3rem"}/></div> : loading ? <ClipLoader color="white" size={"1.3rem"}/> : "Finish mint!"}
+                {pendingRequest ? (
+                  <div className="flex flex-col pb-4 items-center">
+                    <p className="text-md pb-2">Generating layers</p>
+                    <BarLoader color="white" />
+                  </div>
+                ) : loading ? <ClipLoader color="white" size={"1.3rem"}/> : "Finish mint!"}
               </MainButton>
             ) : (
               <MainButton callback={requestNumbers} disabled={loading || pendingRequest}>
