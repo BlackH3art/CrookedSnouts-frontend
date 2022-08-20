@@ -1,4 +1,5 @@
 import { FC, useContext, useEffect, useState } from "react";
+import { toast } from "react-toastify";
 import { getNfts } from "../../api";
 import { MintContext } from "../../context/MintContext";
 import NFTsCard from "./NFTsCard";
@@ -13,12 +14,20 @@ const YourCollection: FC = () => {
   
   useEffect(() => {
 
-    const getNftsData = async () => {
-      const { data } = await getNfts(connectedAccount);
-      setAccountNFTs(data);
-    }
+    try {
 
-    getNftsData();
+      const getNftsData = async () => {
+        const { data } = await getNfts(connectedAccount);
+        setAccountNFTs(data);
+      }
+
+      if(connectedAccount) {
+        getNftsData();
+      }
+  
+    } catch (error) {
+      toast.error("Problem fetching your Crooked Snouts", { theme: "colored" });
+    }
   }, [connectedAccount]);
 
   return (
