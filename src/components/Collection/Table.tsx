@@ -18,7 +18,9 @@ const Table: FC = () => {
       <tbody className="flex flex-col">
         <tr className="flex flex-col md:flex-row w-full">
           <TableHead>contract address:</TableHead>
-          <TableCell>not deployed yet</TableCell>
+          <TableCell>
+          <a className="link" rel="noopener noreferrer" target="_blank" href="https://polygonscan.com/address/0xdEa625395f4b275189125E99fdC6f1072DB5000f">Polygon scan</a>
+          </TableCell>
         </tr>
         <tr className="flex flex-col md:flex-row w-full">
           <TableHead>max supply:</TableHead>

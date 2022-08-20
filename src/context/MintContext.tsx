@@ -91,7 +91,7 @@ const MintContextProvider: FC<Props> = ({ children }) => {
         
         
         // if network different than mumbai, then prompt an error toast
-      } else if(parseInt(await ethereum.request({ method: 'eth_chainId' }), 16) !== 80001) {
+      } else if(parseInt(await ethereum.request({ method: 'eth_chainId' }), 16) !== 137) {
         toast.error("Change network to: Polygon mainnet", { theme: "colored" }); 
         
         

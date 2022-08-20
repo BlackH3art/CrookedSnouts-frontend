@@ -5,8 +5,8 @@ import { NFTsResponseInterface } from '../interfaces/NFTsResponseInterface';
 import { ParsedNumbersInterface } from '../interfaces/ParsedNumbersInterface';
 
 const API = axios.create({ 
-  // baseURL: 'https://crookedsnouts-backend.herokuapp.com/'
-  baseURL: 'http://localhost:3500/'
+  baseURL: 'https://crookedsnouts-backend.herokuapp.com/'
+  // baseURL: 'http://localhost:3500/'
 });
 
 

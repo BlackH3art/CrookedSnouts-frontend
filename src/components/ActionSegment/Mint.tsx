@@ -17,7 +17,7 @@ import { collectionContractABI, collectionContractAddress } from "../../utils/co
 
 const collectionContractProvider = () => {
 
-  const provider = new ethers.providers.AlchemyProvider("maticmum");
+  const provider = new ethers.providers.AlchemyProvider("matic");
   const collectionContract = new ethers.Contract(collectionContractAddress, collectionContractABI, provider);
 
   return collectionContract;
@@ -66,6 +66,8 @@ const Mint: FC<Props> = () => {
     isWhitelisted();
   }, [connectedAccount]);
 
+  console.log('address whitelisted? --> ', isUserWhitelisted);
+  
 
 
   const requestNumbers = async () => {
@@ -75,7 +77,7 @@ const Mint: FC<Props> = () => {
     try {
       
       const transactionHash = await collectionContractSigner?.requestNumbers({
-        value: ethers.utils.parseEther(!isUserWhitelisted ? "1" : "3")
+        value: ethers.utils.parseEther(isUserWhitelisted ? "1" : "3")
       });
       await transactionHash.wait();
       
