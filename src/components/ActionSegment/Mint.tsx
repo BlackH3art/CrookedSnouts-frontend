@@ -46,6 +46,32 @@ const Mint: FC<Props> = () => {
   }, []);
 
   useEffect(() => {
+    async function checkIfRequested() {
+      try {
+        setLoading(true);
+        if(collectionContract && connectedAccount) {
+          
+          const requestId = await collectionContract.addressToRequestId(connectedAccount);
+          const requestMinted = await collectionContract.requestIdMinted(requestId._hex);
+  
+          if(requestMinted || requestId._hex === '0x00') {
+            setLoading(false);
+          } else {
+            setLoading(false);
+            setRequestedNumbers(true);
+          }
+        }
+        
+      } catch (error) {
+        setLoading(false);
+        toast.error("Error checking request id", { theme: "colored" });
+      }
+    }
+
+    checkIfRequested();
+  }, [collectionContract, connectedAccount]);
+
+  useEffect(() => {
     async function isWhitelisted() {
       try {
 
@@ -65,9 +91,6 @@ const Mint: FC<Props> = () => {
 
     isWhitelisted();
   }, [connectedAccount]);
-
-  console.log('address whitelisted? --> ', isUserWhitelisted);
-  
 
 
   const requestNumbers = async () => {
