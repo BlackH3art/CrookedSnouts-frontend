@@ -13,21 +13,10 @@ import ClipLoader from 'react-spinners/ClipLoader';
 import BarLoader from 'react-spinners/BarLoader';
 
 import { collectionContractABI, collectionContractAddress } from "../../utils/constants";
+import { useContract } from "wagmi";
 
 
-const collectionContractProvider = () => {
-
-  const provider = new ethers.providers.AlchemyProvider("matic");
-  const collectionContract = new ethers.Contract(collectionContractAddress, collectionContractABI, provider);
-
-  return collectionContract;
-}
-
-interface Props {
-  
-}
-
-const Mint: FC<Props> = () => {
+const Mint: FC = () => {
 
   const { connectWallet, connectedAccount, collectionContractSigner, setAccountNFTs } = useContext(MintContext);
   const [minted, setMinted] = useState<boolean>(false);
@@ -38,57 +27,59 @@ const Mint: FC<Props> = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [pendingRequest, setPendingrequest] = useState<boolean>(false);
 
-  const [collectionContract, setCollectionContract] = useState<ethers.Contract>();
+
+  const contractProvider = useContract({
+    address: collectionContractAddress,
+    abi: collectionContractABI,
+    signerOrProvider: new ethers.providers.InfuraProvider("matic")
+  })
 
 
-  useEffect(() => {
-    setCollectionContract(collectionContractProvider());
-  }, []);
-
-  useEffect(() => {
-    async function checkIfRequested() {
-      try {
-        setLoading(true);
-        if(collectionContract && connectedAccount) {
-          
-          const requestId = await collectionContract.addressToRequestId(connectedAccount);
-          const requestMinted = await collectionContract.requestIdMinted(requestId._hex);
-  
-          if(requestMinted || requestId._hex === '0x00') {
-            setLoading(false);
-          } else {
-            setLoading(false);
-            setRequestedNumbers(true);
-          }
-        }
+  const checkIfRequested = async () => {
+    try {
+      setLoading(true);
+      if(contractProvider && connectedAccount) {
         
-      } catch (error) {
-        setLoading(false);
-        toast.error("Error checking request id", { theme: "colored" });
-      }
-    }
+        const requestId = await contractProvider.addressToRequestId(connectedAccount);
+        const requestMinted = await contractProvider.requestIdMinted(requestId._hex);
 
-    checkIfRequested();
-  }, [collectionContract, connectedAccount]);
+        if(requestMinted || requestId._hex === '0x00') {
+          setLoading(false);
+        } else {
+          setLoading(false);
+          setRequestedNumbers(true);
+        }
+      }
+      
+    } catch (error) {
+      setLoading(false);
+      toast.error("Error checking request id", { theme: "colored" });
+    }
+  }
+
+  const isWhitelisted = async () => {
+    try {
+
+      if(connectedAccount) {
+        const { data } = await getIsWhitelisted(connectedAccount);
+
+        if(data) {
+          setIsUserWhitelisted(true);
+        } else {
+          setIsUserWhitelisted(false);
+        }
+      }
+    } catch (error) {
+      toast.error("Incorrect address", { theme: "colored" });
+    }
+  }
 
   useEffect(() => {
-    async function isWhitelisted() {
-      try {
+    checkIfRequested();
+  }, [connectedAccount]);
 
-        if(connectedAccount) {
-          const { data } = await getIsWhitelisted(connectedAccount);
-  
-          if(data) {
-            setIsUserWhitelisted(true);
-          } else {
-            setIsUserWhitelisted(false);
-          }
-        }
-      } catch (error) {
-        toast.error("Incorrect address", { theme: "colored" });
-      }
-    }
 
+  useEffect(() => {
     isWhitelisted();
   }, [connectedAccount]);
 
@@ -115,48 +106,50 @@ const Mint: FC<Props> = () => {
     }
   }
 
-  collectionContract?.on("RequestFulfilled", async (num) => {
-    try {
-      const requestId = await collectionContract.addressToRequestId(connectedAccount);
-
-      if(num._hex === requestId._hex) {
-        setPendingrequest(false);
-      } 
-
-    } catch (error) {
-      return null;
-    }
-  });
-
-
+  
   const mint = async () => {
     
     setLoading(true);
-
+    
     try {
       const transactionHash = await collectionContractSigner?.create();
       const receipt = await transactionHash.wait();
       
       const imageURI = receipt.events[1].args[0];
-  
+      
       setMinted(true);
       setGeneratedNFT(imageURI);
-  
+      
       const { data } = await getNfts(connectedAccount);
       setAccountNFTs(data);
-  
+      
       setLoading(false);
       setRequestedNumbers(false);
-
+      
       toast.success("Crooked Snout minted! Checkout your wallet!", { theme: "colored" });
-
+      
     } catch (error) {
       setLoading(false);
       toast.error("Something went wrong", { theme: "colored" });
     }
   }
+  
+
+  // contractProvider?.on("RequestFulfilled", async (num) => {
+  //   try {
+  //     const requestId = await contractProvider.addressToRequestId(connectedAccount);
+
+  //     if(num._hex === requestId._hex) {
+  //       setPendingrequest(false);
+  //     } 
+
+  //   } catch (error) {
+  //     return null;
+  //   }
+  // });
 
 
+  
   return (
     <>
       <div className="w-full md:w-4/5 xl:w-3/5 h-[100vh] md:h-[60vh] flex flex-col-reverse justify-end items-center md:flex-row md:justify-around md:items-start">

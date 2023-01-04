@@ -1,12 +1,9 @@
-import { FC, useContext } from "react";
-import { AppContext } from "../../context/AppContext";
+import { FC } from "react";
 import CrookedFaces from '../../images/crookedfaces.svg';
 import CollectionStats from "./CollectionStats";
 
 
 const Main: FC = () => {
-
-  const { maxWhitelistSpots, maxPublicSpots, maxOwnerSpots, takenPublicSpots, takenOwnerSpots } = useContext(AppContext);
 
   return (
     <>

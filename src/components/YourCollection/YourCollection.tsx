@@ -11,24 +11,23 @@ const YourCollection: FC = () => {
 
   const { connectedAccount, setAccountNFTs, accountNFTs } = useContext(MintContext);
 
-  
-  useEffect(() => {
-
+  const getNftsData = async () => {
     try {
-
-      const getNftsData = async () => {
-        const { data } = await getNfts(connectedAccount);
-        setAccountNFTs(data);
-      }
-
-      if(connectedAccount) {
-        getNftsData();
-      }
-  
+      const { data } = await getNfts(connectedAccount);
+      setAccountNFTs(data);
+      
     } catch (error) {
       toast.error("Problem fetching your Crooked Snouts", { theme: "colored" });
     }
+  }
+  
+  useEffect(() => {
+    if(connectedAccount) {
+      getNftsData();
+    }
   }, [connectedAccount]);
+
+  
 
   return (
     <>
