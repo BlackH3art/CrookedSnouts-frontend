@@ -6,12 +6,12 @@ import './index.css'
 import MintContextProvider from './context/MintContext';
 
 import { WagmiConfig, createClient, configureChains } from 'wagmi';
-import { polygon } from 'wagmi/chains';
+import { polygon, polygonMumbai } from 'wagmi/chains';
 import { MetaMaskConnector } from 'wagmi/connectors/metaMask';
 import { publicProvider } from 'wagmi/providers/public';
 
 const { chains, provider, webSocketProvider } = configureChains(
-  [polygon],
+  [polygon, polygonMumbai],
   [publicProvider()],
 )
 

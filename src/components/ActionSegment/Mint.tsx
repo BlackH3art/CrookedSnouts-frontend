@@ -12,13 +12,13 @@ import MainButtonMobile from "../_Reusable/MainButtonMobile";
 import ClipLoader from 'react-spinners/ClipLoader';
 import BarLoader from 'react-spinners/BarLoader';
 
-import { collectionContractABI, collectionContractAddress } from "../../utils/constants";
-import { useContract } from "wagmi";
+import { collectionContractABI, collectionContractAddress, networkRPC } from "../../utils/constants";
+import { useContract, useContractEvent, useSigner } from "wagmi";
 
 
 const Mint: FC = () => {
 
-  const { connectWallet, connectedAccount, collectionContractSigner, setAccountNFTs } = useContext(MintContext);
+  const { connectWallet, connectedAccount, setAccountNFTs } = useContext(MintContext);
   const [minted, setMinted] = useState<boolean>(false);
   const [generatedNFT, setGeneratedNFT] = useState<string>('');
   const [isUserWhitelisted, setIsUserWhitelisted] = useState<boolean>(false);
@@ -27,12 +27,19 @@ const Mint: FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [pendingRequest, setPendingrequest] = useState<boolean>(false);
 
+  const { data: signer } = useSigner();
 
   const contractProvider = useContract({
     address: collectionContractAddress,
     abi: collectionContractABI,
-    signerOrProvider: new ethers.providers.InfuraProvider("matic")
-  })
+    signerOrProvider: new ethers.providers.InfuraProvider(networkRPC)
+  });
+
+  const contractSigner = useContract({
+    address: collectionContractAddress,
+    abi: collectionContractABI,
+    signerOrProvider: signer
+  });
 
 
   const checkIfRequested = async () => {
@@ -90,7 +97,7 @@ const Mint: FC = () => {
 
     try {
       
-      const transactionHash = await collectionContractSigner?.requestNumbers({
+      const transactionHash = await contractSigner?.requestNumbers({
         value: ethers.utils.parseEther(isUserWhitelisted ? "1" : "3")
       });
       await transactionHash.wait();
@@ -99,10 +106,10 @@ const Mint: FC = () => {
       setRequestedNumbers(true);
       setPendingrequest(true);
   
-    } catch (error) {
+    } catch (error: any) {
       setLoading(false);
       setPendingrequest(false);
-      toast.error("Something went wrong", { theme: "colored" });
+      toast.info(error.message, { theme: "colored" });
     }
   }
 
@@ -112,7 +119,7 @@ const Mint: FC = () => {
     setLoading(true);
     
     try {
-      const transactionHash = await collectionContractSigner?.create();
+      const transactionHash = await contractSigner?.create();
       const receipt = await transactionHash.wait();
       
       const imageURI = receipt.events[1].args[0];
@@ -128,26 +135,34 @@ const Mint: FC = () => {
       
       toast.success("Crooked Snout minted! Checkout your wallet!", { theme: "colored" });
       
-    } catch (error) {
+    } catch (error: any) {
       setLoading(false);
-      toast.error("Something went wrong", { theme: "colored" });
+      toast.error(error.message, { theme: "colored" });
     }
   }
   
 
-  // contractProvider?.on("RequestFulfilled", async (num) => {
-  //   try {
-  //     const requestId = await contractProvider.addressToRequestId(connectedAccount);
+  const handleFulfilled = async (num: any) => {
+    try {
+      const requestId = await contractProvider?.addressToRequestId(connectedAccount);
 
-  //     if(num._hex === requestId._hex) {
-  //       setPendingrequest(false);
-  //     } 
+      if(num._hex === requestId._hex) {
+        setPendingrequest(false);
+      } 
 
-  //   } catch (error) {
-  //     return null;
-  //   }
-  // });
+    } catch (error) {
+      return null;
+    }
+  }
 
+  useContractEvent({
+    address: collectionContractAddress,
+    abi: collectionContractABI,
+    eventName: 'RequestFulfilled',
+    listener(num) {
+      handleFulfilled(num);
+    },
+  });
 
   
   return (

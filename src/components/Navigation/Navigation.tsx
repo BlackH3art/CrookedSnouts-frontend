@@ -1,41 +1,23 @@
-import { BigNumber, ethers } from "ethers";
 import { FC, useContext, useEffect, useState } from "react";
-import { toast } from "react-toastify";
+import { useAccount, useBalance } from "wagmi";
 import { MintContext } from "../../context/MintContext";
 
 
 
 const Navigation: FC = () => {
 
-  const { connectWallet, connectedAccount, signer } = useContext(MintContext);
+  const { connectWallet, connectedAccount } = useContext(MintContext);
   const [balance, setBalance] = useState<number>(0);
+  const { address } = useAccount();
+  
+
+  const { data } = useBalance({
+    address: `0x${address?.slice(2)}`,
+  });
 
   useEffect(() => {
-
-    async function getBalance() {
-      try {
-
-        if(!signer) {
-          return;
-        } else {
-          if(!connectedAccount) {
-            return; 
-          } else {
-            let signerBalance = await signer.getBalance();
-            setBalance(Number(ethers.utils.formatEther(BigNumber.from(signerBalance))))
-          }
-        }
-      } catch (error) {
-        toast.error("Problem getting a signer. Try refresh.", { theme: "colored" }); 
-      }
-    }
-
-    getBalance();
-      
-  }, [connectedAccount]);
-
-
-
+    setBalance(Number(data?.formatted));
+  }, [address]);
   
 
   return (
@@ -45,7 +27,7 @@ const Navigation: FC = () => {
 
           {connectedAccount ? (
             <div className="flex items-center h-12 text-white font-semibold px-7 py-2 mt-4 mr-4 xl:mr-0">
-              <p className="pr-10 text-lg">{balance.toFixed(6)} MATIC</p>
+              <p className="pr-10 text-lg">{balance.toFixed(6)} {data?.symbol}</p>
               <p className="">{`${connectedAccount.slice(0,5)}...${connectedAccount.slice(connectedAccount.length - 4)}`}</p>
             </div>
             ) : (
@@ -53,8 +35,6 @@ const Navigation: FC = () => {
               Connect wallet
             </button>
             )} 
-
-
 
         </div>
       </nav>

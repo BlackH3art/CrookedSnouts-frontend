@@ -7,57 +7,24 @@ import { NFTsResponseInterface } from "../interfaces/NFTsResponseInterface";
 
 import { useAccount, useConnect } from 'wagmi';
 
-import { chainID, collectionContractABI, collectionContractAddress } from "../utils/constants";
+import { chainID } from "../utils/constants";
 
 const { ethereum } = window;
 
+
+
 export const MintContext = createContext<MintContextInterface>({
-  collectionContractSigner: null,
-  signer: null,
   connectWallet: () => {},
   connectedAccount: "",
-
   accountNFTs: [],
   setAccountNFTs: () => {}
 });
-
-const getSigner = () => {
-
-  if(!ethereum) {
-    console.warn('No Metamask detected');
-    return null;
-  }
-
-  const provider = new ethers.providers.Web3Provider(ethereum);
-  const signer = provider.getSigner();
-
-  return signer;
-}
-
-const getContractSigner = () => {
-  const signer = getSigner();
-
-  if(!signer) {
-    console.warn('There\'s no signer');
-    return null;
-  }
-  const collectionContract = new ethers.Contract(collectionContractAddress, collectionContractABI, signer);
-
-  return collectionContract;
-}
-
-
-
-
 
 interface Props {
   children: ReactNode;
 }
 
 const MintContextProvider: FC<Props> = ({ children }) => {
-
-  const collectionContractSigner = getContractSigner();
-  const signer = getSigner();
 
   const [connectedAccount, setConnectedAccount] = useState<string>('');
   const [accountNFTs, setAccountNFTs] = useState<NFTsResponseInterface[]>([]);
@@ -135,12 +102,8 @@ const MintContextProvider: FC<Props> = ({ children }) => {
 
   return (
     <MintContext.Provider value={{
-      collectionContractSigner,
-      signer,
-
       connectedAccount,
       connectWallet, 
-
       accountNFTs,
       setAccountNFTs
     }}>
