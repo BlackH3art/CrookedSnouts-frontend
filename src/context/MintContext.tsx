@@ -1,4 +1,3 @@
-import { ethers } from "ethers";
 import { useState, useEffect, createContext, FC, ReactNode } from "react";
 import { toast } from "react-toastify";
 
@@ -12,10 +11,10 @@ import { chainID } from "../utils/constants";
 const { ethereum } = window;
 
 
-
 export const MintContext = createContext<MintContextInterface>({
   connectWallet: () => {},
   connectedAccount: "",
+  setConnectedAccount: () => {},
   accountNFTs: [],
   setAccountNFTs: () => {}
 });
@@ -42,7 +41,6 @@ const MintContextProvider: FC<Props> = ({ children }) => {
   });
   
   ethereum?.on('chainChanged', (chainChangedId: string) => { 
-    
     if(isConnected && address && chainChangedId === "0x" + chainID.toString(16)) {
       setConnectedAccount(address);
     } else {
@@ -86,7 +84,13 @@ const MintContextProvider: FC<Props> = ({ children }) => {
       }
       
     } catch (error: any) {
-      toast.info(error.message);
+      if(error.message === "Resource unavailable") {
+        setConnectedAccount('');
+      } else if (error.message === "Connector already connected") {
+        return;
+      } else {
+        toast.info(error.message);
+      }
     }
   }
   
@@ -104,6 +108,7 @@ const MintContextProvider: FC<Props> = ({ children }) => {
     <MintContext.Provider value={{
       connectedAccount,
       connectWallet, 
+      setConnectedAccount,
       accountNFTs,
       setAccountNFTs
     }}>

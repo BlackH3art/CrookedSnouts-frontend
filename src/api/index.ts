@@ -2,8 +2,8 @@ import axios from 'axios';
 import { NFTsResponseInterface } from '../interfaces/NFTsResponseInterface';
 
 const API = axios.create({ 
-  baseURL: 'http://localhost:3500/',
-  // baseURL: 'https://api.crookedsnouts.com/',
+  // baseURL: 'http://localhost:3500/',
+  baseURL: 'https://api.crookedsnouts.com/',
 });
 
 

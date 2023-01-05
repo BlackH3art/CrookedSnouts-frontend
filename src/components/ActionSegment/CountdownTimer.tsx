@@ -1,5 +1,5 @@
 import { FC, ReactNode, useContext, useEffect, useState } from "react";
-import { AppContext } from "../../context/AppContext";
+// import { AppContext } from "../../context/AppContext";
 import { RemainingTime } from "../../interfaces/RemainingTimeInterface";
 import { getRemainingTime } from "../../utils/countdown";
 
@@ -30,7 +30,8 @@ interface CounterProps {
 const CountdownTimer: FC<CounterProps> = ({ timestamp }) => {
 
   const [remainingTime, setRemainingTime] = useState<RemainingTime>(remainingTimeDefault);
-  const { whitelistClose, whitelistOpen } = useContext(AppContext);
+  let whitelistClose = new Date()
+  let whitelistOpen = new Date()
 
   useEffect(() => {
 
